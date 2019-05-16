@@ -2,12 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import { toast } from 'react-toastify';
 
 import 'semantic-ui-css/semantic.min.css';
+import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
+
 import * as serviceWorker from './serviceWorker';
 
 import Routes from './routes';
+
+toast.configure();
 
 ReactDOM.render(
   <BrowserRouter>

@@ -28,6 +28,14 @@ export async function getRace(raceId) {
   return json;
 }
 
+// fetch all races
+export async function getAllRaces() {
+  const url = `${BASE_URL}/races`;
+  const response = await fetch(url, { method: 'GET' });
+  const json = await response.json();
+  return json;
+}
+
 // fetch riders by race
 export async function getRidersByRace(raceId) {
   const url = `${BASE_URL}/races/${raceId}/riders`;
@@ -41,7 +49,14 @@ export async function getRidersByRace(raceId) {
 // create rider
 export async function createRider(rider) {
   const url = `${BASE_URL}/riders`;
-  const response = await fetch(url, { method: 'POST' });
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: new Headers({
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    }),
+    body: JSON.stringify(rider),
+  });
   const json = await response.json();
   return json;
 }
@@ -49,7 +64,14 @@ export async function createRider(rider) {
 // update rider
 export async function updateRider(rider) {
   const url = `${BASE_URL}/riders/${rider.id}`;
-  const response = await fetch(url, { method: 'POST' });
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: new Headers({
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    }),
+    body: JSON.stringify(rider),
+  });
   const json = await response.json();
   return json;
 }
@@ -57,6 +79,14 @@ export async function updateRider(rider) {
 // fetch rider by id
 export async function getRider(riderId) {
   const url = `${BASE_URL}/riders/${riderId}`;
+  const response = await fetch(url, { method: 'GET' });
+  const json = await response.json();
+  return json;
+}
+
+// fetch all riders
+export async function getAllRiders() {
+  const url = `${BASE_URL}/riders`;
   const response = await fetch(url, { method: 'GET' });
   const json = await response.json();
   return json;
