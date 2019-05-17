@@ -9,9 +9,9 @@ import RegistrationForm from '../../components/registration-form/registration-fo
 import Loading from '../../components/loading/loading';
 import Selector from '../../components/selector/selector';
 
-import './check-in.css';
+import './change-event.css';
 
-function CheckIn() {
+function ChangeEvent() {
   const [riders, setRiders] = useState([]); // for dropdown select
   const [races, setRaces] = useState({}); // for edit screen dropdown
   const [rider, setRider] = useState({}); // for edit screen
@@ -45,7 +45,7 @@ function CheckIn() {
       <p />
       <Selector
         values={riders}
-        display={rider => rider.name} // TODO: add race name to rider display in dropdown
+        display={rider => rider.name}
         placeholder="Select rider"
         selectedId={rider.id || ''}
         onClick={fetchRider}
@@ -71,13 +71,13 @@ function Breadcrumbs() {
         <Link to="">Home</Link>
       </Breadcrumb.Section>
       <Breadcrumb.Divider />
-      <Breadcrumb.Section>Check-In</Breadcrumb.Section>
-      <Breadcrumb.Divider />
       <Breadcrumb.Section>
-        <Link to="/change-event">Change Active Event</Link>
+        <Link to="/checkin">Check-In</Link>
       </Breadcrumb.Section>
+      <Breadcrumb.Divider />
+      <Breadcrumb.Section>Change Active Event</Breadcrumb.Section>
     </Breadcrumb>
   );
 }
 
-export default CheckIn;
+export default ChangeEvent;

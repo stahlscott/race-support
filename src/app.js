@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Grid, Segment } from 'semantic-ui-react';
 
-import { getAllEvents, getAllRaces } from './api/api';
+import { getAllEvents, getRacesByEvent } from './api/events';
 
 import Loading from './components/loading/loading';
 
@@ -14,16 +14,18 @@ function App() {
   const [races, setRaces] = useState([]); // for edit screen dropdown
 
   useEffect(() => {
-    const fetchRaces = async () => {
-      const races = await getAllRaces();
+    const fetchActiveEvent = async () => {
+      const events = await getAllEvents();
+      const activeEvent = events.filter(event => event.active)[0];
+      setEvent(activeEvent);
+      fetchRaces(activeEvent.id);
+    };
+
+    const fetchRaces = async eventId => {
+      const races = await getRacesByEvent(eventId);
       const ordered = races.sort((a, b) => a.name - b.name);
       setRaces(ordered);
       setLoading(false);
-    };
-
-    const fetchActiveEvent = async () => {
-      const events = await getAllEvents();
-      setEvent(events.filter(event => event.active)[0]);
     };
 
     fetchRaces();
@@ -39,7 +41,7 @@ function App() {
           <h1>Race Support / {event.name}</h1>
         </Grid.Column>
         <Grid.Column width={2}>
-          <Link to="/checkin">Checkin</Link>
+          <Link to="/checkin">Admin</Link>
         </Grid.Column>
       </Grid>
       {races.map((race, index) => (

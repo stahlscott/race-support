@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Form } from 'semantic-ui-react';
 import { toast } from 'react-toastify';
 
-import RaceSelect from '../race-select/race-select';
-import { updateRider, createRider } from '../../api/api';
+import Selector from '../selector/selector';
+import { updateRider, createRider } from '../../api/riders';
 
 const defaultRider = {
   name: '',
@@ -61,7 +61,13 @@ function RegistrationForm({ selectedRider, races, onCancel }) {
           onChange={(e, v) => setRider({ ...rider, bib: v.value })}
         />
       </Form.Group>
-      <RaceSelect races={races} value={raceId} onClick={raceId => setRider({ ...rider, raceId })} />
+      <Selector
+        values={races}
+        display={race => race.name}
+        placeholder={'Select race'}
+        selectedId={raceId}
+        onClick={raceId => setRider({ ...rider, raceId })}
+      />
       <p />
       <Form.Checkbox
         checked={checkedIn}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Breadcrumb, Container } from 'semantic-ui-react';
 
-import { getRidersByRace, getRace } from '../../api/api';
+import { getRidersByRace, getRace } from '../../api/races';
 
 import Loading from '../../components/loading/loading';
 import RiderTable from '../../components/rider-table/rider-table';
@@ -35,15 +35,21 @@ function StartList({ match }) {
 
   return (
     <Container className="container">
-      <Breadcrumb>
-        <Breadcrumb.Section>
-          <Link to="">Home</Link>
-        </Breadcrumb.Section>
-        <Breadcrumb.Divider />
-        <Breadcrumb.Section>{race.name}</Breadcrumb.Section>
-      </Breadcrumb>
+      <Breadcrumbs race={race} />
       <RiderTable riders={riders} />
     </Container>
+  );
+}
+
+function Breadcrumbs({ race }) {
+  return (
+    <Breadcrumb>
+      <Breadcrumb.Section>
+        <Link to="">Home</Link>
+      </Breadcrumb.Section>
+      <Breadcrumb.Divider />
+      <Breadcrumb.Section>{race.name}</Breadcrumb.Section>
+    </Breadcrumb>
   );
 }
 
