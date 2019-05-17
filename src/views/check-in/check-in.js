@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Breadcrumb, Container, Loader, Segment } from 'semantic-ui-react';
+import { Breadcrumb, Container, Segment } from 'semantic-ui-react';
 
 import { getAllRaces, getAllRiders, getRider } from '../../api/api';
 
+import RegistrationForm from '../../components/registration-form/registration-form';
 import RiderSelect from '../../components/rider-select/rider-select';
+import Loading from '../../components/loading/loading';
 
 import './check-in.css';
-import RegistrationForm from '../../components/registration-form/registration-form';
 
 function CheckIn() {
   const [riders, setRiders] = useState([]); // for dropdown select
@@ -35,7 +36,7 @@ function CheckIn() {
     setRider(rider);
   };
 
-  if (!riders.length || !races.length) return <Loader />;
+  if (!riders.length || !races.length) return <Loading />;
 
   return (
     <Container className="container">

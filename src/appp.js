@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
-import { Container, Grid, List, Segment } from 'semantic-ui-react';
+import { Container, Grid, Segment } from 'semantic-ui-react';
 
 import { getAllEvents, getAllRaces } from './api/api';
+
+import Loading from './components/loading/loading';
 
 import './app.css';
 
 function App() {
+  const [loading, setLoading] = useState(true);
   const [event, setEvent] = useState({ name: '...' }); // for edit screen dropdown
   const [races, setRaces] = useState([]); // for edit screen dropdown
 
@@ -16,7 +18,9 @@ function App() {
       const races = await getAllRaces();
       const ordered = races.sort((a, b) => a.name - b.name);
       setRaces(ordered);
+      setLoading(false);
     };
+
     const fetchActiveEvent = async () => {
       const events = await getAllEvents();
       setEvent(events.filter(event => event.active)[0]);
@@ -25,6 +29,8 @@ function App() {
     fetchRaces();
     fetchActiveEvent();
   }, []);
+
+  if (loading) return <Loading />;
 
   return (
     <Container className="container">
@@ -36,13 +42,11 @@ function App() {
           <Link to="/checkin">Checkin</Link>
         </Grid.Column>
       </Grid>
-      {/* <List celled> */}
       {races.map((race, index) => (
         <Link key={index} to={`/start/${race.id}`} className="listItem">
           <Segment>{race.name}</Segment>
         </Link>
       ))}
-      {/* </List> */}
     </Container>
   );
 }
