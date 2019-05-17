@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Loader, Button, Segment } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { Breadcrumb, Container, Loader, Segment } from 'semantic-ui-react';
 
 import { getAllRaces, getAllRiders, getRider } from '../../api/api';
 
@@ -38,6 +39,12 @@ function CheckIn() {
 
   return (
     <Container className="container">
+      <Breadcrumb>
+        <Breadcrumb.Section>
+          <Link to="">Home</Link>
+        </Breadcrumb.Section>
+      </Breadcrumb>
+      <p />
       <RiderSelect riders={riders} value={rider.id || ''} onClick={fetchRider} />
       <Segment>
         <RegistrationForm
@@ -52,19 +59,5 @@ function CheckIn() {
     </Container>
   );
 }
-
-// function CreateButton({ setRider, setIsEditing }) {
-//   return (
-//     <Button
-//       onClick={async () => {
-//         setRider({});
-//         // setIsEditing(true);
-//       }}
-//       fluid
-//     >
-//       Create New
-//     </Button>
-//   );
-// }
 
 export default CheckIn;

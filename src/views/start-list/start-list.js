@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Loader } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { Breadcrumb, Container, Loader } from 'semantic-ui-react';
 
 import { getRidersByRace, getRace } from '../../api/api';
 
@@ -26,11 +27,17 @@ function StartList({ match }) {
     fetchRace();
   }, [match]);
 
-  if (!match || riders.length === 0 || !race.name) return <Loader />;
+  if (!match || !race.name) return <Loader />;
 
   return (
     <Container className="container">
-      <div>{race.name}</div>
+      <Breadcrumb>
+        <Breadcrumb.Section>
+          <Link to="">Home</Link>
+        </Breadcrumb.Section>
+        <Breadcrumb.Divider />
+        <Breadcrumb.Section>{race.name}</Breadcrumb.Section>
+      </Breadcrumb>
       <RiderTable riders={riders} />
     </Container>
   );

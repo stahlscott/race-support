@@ -2,7 +2,7 @@ import React from 'react';
 import { Table } from 'semantic-ui-react';
 
 function RiderTable({ riders }) {
-  return (
+  return riders.length > 0 ? (
     <Table celled padded>
       <Table.Header>
         <Table.Row>
@@ -21,6 +21,8 @@ function RiderTable({ riders }) {
         ))}
       </Table.Body>
     </Table>
+  ) : (
+    <div>No one registered :(</div>
   );
 }
 
