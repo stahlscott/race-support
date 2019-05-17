@@ -1,83 +1,86 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Breadcrumb, Container, Segment } from 'semantic-ui-react';
+import { Container, Button } from 'semantic-ui-react';
+import { toast } from 'react-toastify';
 
-import { getAllRaces } from '../../api/races';
-import { getAllRiders, getRider } from '../../api/riders';
+import { getAllEvents, setActiveEvent, syncToBikeReg } from '../../api/events';
+import { paths } from '../../routes';
 
-import RegistrationForm from '../../components/registration-form/registration-form';
+import AdminHeader from '../../components/admin-header/admin-header';
 import Loading from '../../components/loading/loading';
 import Selector from '../../components/selector/selector';
 
 import './change-event.css';
 
 function ChangeEvent() {
-  const [riders, setRiders] = useState([]); // for dropdown select
-  const [races, setRaces] = useState({}); // for edit screen dropdown
-  const [rider, setRider] = useState({}); // for edit screen
-
-  const fetchRiders = async () => {
-    const riders = await getAllRiders();
-    const ordered = riders.sort((a, b) => a.name - b.name);
-    setRiders(ordered);
-  };
+  const [events, setEvents] = useState([]);
+  const [activeEvent, setActiveEvent] = useState({});
+  const [selectedEventId, setSelectedEventId] = useState('');
 
   useEffect(() => {
-    const fetchRaces = async () => {
-      const races = await getAllRaces();
-      const ordered = races.sort((a, b) => a.name - b.name);
-      setRaces(ordered);
+    const fetchEvents = async () => {
+      const events = await getAllEvents();
+      const ordered = events
+        .sort((a, b) => a.name - b.name)
+        .map(event => (event.active ? (event = { ...event, name: `${event.name} // Active` }) : event));
+      setEvents(ordered);
+      const activeEvent = events.filter(event => event.active)[0];
+      setActiveEvent(activeEvent);
+      setSelectedEventId(activeEvent.id);
     };
-    fetchRiders();
-    fetchRaces();
+    fetchEvents();
   }, []);
 
-  const fetchRider = async riderId => {
-    const rider = riderId ? await getRider(riderId) : {};
-    setRider(rider);
-  };
-
-  if (!riders.length || !races.length) return <Loading />;
+  if (!events.length) return <Loading />;
 
   return (
     <Container className="container">
-      <Breadcrumbs />
+      <AdminHeader active={paths.eventManagement} />
       <p />
       <Selector
-        values={riders}
+        values={events}
         display={rider => rider.name}
-        placeholder="Select rider"
-        selectedId={rider.id || ''}
-        onClick={fetchRider}
+        placeholder="Select active event"
+        selectedId={selectedEventId}
+        onClick={eventId => setSelectedEventId(eventId)}
       />
-      <Segment>
-        <RegistrationForm
-          selectedRider={rider}
-          races={races}
-          onCancel={() => {
-            setRider({});
-            fetchRiders();
-          }}
-        />
-      </Segment>
+      <p />
+      <Button
+        negative
+        onClick={() => changeActive(selectedEventId, () => setSelectedEventId(activeEvent.id))}
+        disabled={selectedEventId === activeEvent.id || selectedEventId === ''}
+      >
+        Change Active
+      </Button>
+      <Button negative onClick={() => syncActiveToBikeReg(activeEvent)} disabled={selectedEventId !== activeEvent.id}>
+        Re-Sync from BikeReg
+      </Button>
     </Container>
   );
 }
 
-function Breadcrumbs() {
-  return (
-    <Breadcrumb>
-      <Breadcrumb.Section>
-        <Link to="">Home</Link>
-      </Breadcrumb.Section>
-      <Breadcrumb.Divider />
-      <Breadcrumb.Section>
-        <Link to="/checkin">Check-In</Link>
-      </Breadcrumb.Section>
-      <Breadcrumb.Divider />
-      <Breadcrumb.Section>Change Active Event</Breadcrumb.Section>
-    </Breadcrumb>
-  );
+function changeActive(selectedEventId, resetActive) {
+  if (window.confirm(`Are you sure you want to change the active event?`)) {
+    setActiveEvent(selectedEventId);
+    toast.success('Active event changed', {
+      position: toast.POSITION.BOTTOM_CENTER,
+    });
+  } else {
+    resetActive();
+  }
+}
+
+function syncActiveToBikeReg(activeEvent) {
+  if (
+    window.confirm(
+      `Are you sure you want to re-sync ${activeEvent.name}? ` +
+        `This will reset all data (new registrations, check-ins) associated with this event.`
+    )
+  ) {
+    syncToBikeReg(activeEvent.id);
+    toast.success('Synced', {
+      position: toast.POSITION.BOTTOM_CENTER,
+    });
+  }
 }
 
 export default ChangeEvent;

@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Breadcrumb, Container, Segment } from 'semantic-ui-react';
+import { Container, Segment } from 'semantic-ui-react';
 
 import { getAllRaces } from '../../api/races';
 import { getAllRiders, getRider } from '../../api/riders';
+import { paths } from '../../routes';
 
+import AdminHeader from '../../components/admin-header/admin-header';
 import RegistrationForm from '../../components/registration-form/registration-form';
 import Loading from '../../components/loading/loading';
 import Selector from '../../components/selector/selector';
 
-import './check-in.css';
+import './registration.css';
 
-function CheckIn() {
-  const [riders, setRiders] = useState([]); // for dropdown select
-  const [races, setRaces] = useState({}); // for edit screen dropdown
-  const [rider, setRider] = useState({}); // for edit screen
+function Registration() {
+  const [riders, setRiders] = useState([]);
+  const [races, setRaces] = useState({});
+  const [rider, setRider] = useState({});
 
   const fetchRiders = async () => {
     const riders = await getAllRiders();
@@ -41,11 +42,11 @@ function CheckIn() {
 
   return (
     <Container className="container">
-      <Breadcrumbs />
+      <AdminHeader active={paths.registration} />
       <p />
       <Selector
         values={riders}
-        display={rider => rider.name} // TODO: add race name to rider display in dropdown
+        display={rider => `${rider.name} // ${rider.raceName}`}
         placeholder="Select rider"
         selectedId={rider.id || ''}
         onClick={fetchRider}
@@ -64,20 +65,4 @@ function CheckIn() {
   );
 }
 
-function Breadcrumbs() {
-  return (
-    <Breadcrumb>
-      <Breadcrumb.Section>
-        <Link to="">Home</Link>
-      </Breadcrumb.Section>
-      <Breadcrumb.Divider />
-      <Breadcrumb.Section>Check-In</Breadcrumb.Section>
-      <Breadcrumb.Divider />
-      <Breadcrumb.Section>
-        <Link to="/change-event">Change Active Event</Link>
-      </Breadcrumb.Section>
-    </Breadcrumb>
-  );
-}
-
-export default CheckIn;
+export default Registration;

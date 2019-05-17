@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Container, Grid, Segment } from 'semantic-ui-react';
 
 import { getAllEvents, getRacesByEvent } from './api/events';
+import { paths } from './routes';
 
 import Loading from './components/loading/loading';
 
@@ -28,7 +29,6 @@ function App() {
       setLoading(false);
     };
 
-    fetchRaces();
     fetchActiveEvent();
   }, []);
 
@@ -41,11 +41,11 @@ function App() {
           <h1>Race Support / {event.name}</h1>
         </Grid.Column>
         <Grid.Column width={2}>
-          <Link to="/checkin">Admin</Link>
+          <Link to={paths.registration}>Admin</Link>
         </Grid.Column>
       </Grid>
       {races.map((race, index) => (
-        <Link key={index} to={`/start/${race.id}`} className="listItem">
+        <Link key={index} to={`${paths.start}/${race.id}`} className="listItem">
           <Segment>{race.name}</Segment>
         </Link>
       ))}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-testing-library';
-import CheckIn from './check-in';
+import AdminHeader from './admin-header';
 
 test('renders without crashing', () => {
-  render(<CheckIn />);
+  render(<AdminHeader />);
 });
