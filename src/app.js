@@ -49,7 +49,7 @@ function App() {
 
 function MainHeader({ event }) {
   return [
-    <Grid className="mainHeader">
+    <Grid key="wide" className="mainHeader">
       <Grid.Column width={14}>
         <h1>
           <Image src={cyclist} size="mini" inline /> {event.name}
@@ -61,7 +61,7 @@ function MainHeader({ event }) {
         </Link>
       </Grid.Column>
     </Grid>,
-    <Grid className="responsiveHeader">
+    <Grid key="small" className="responsiveHeader">
       <h1>
         <Image src={cyclist} size="mini" inline /> {event.name}
       </h1>

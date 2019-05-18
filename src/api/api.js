@@ -1,6 +1,6 @@
 export async function get(url) {
   const response = await fetch(url, { method: 'GET' });
-  const json = await response.json();
+  const json = response && response.ok ? await response.json() : {};
   return json;
 }
 
@@ -13,6 +13,6 @@ export async function post(url, payload) {
     }),
     body: JSON.stringify(payload),
   });
-  const json = await response.json();
+  const json = response && response.ok ? await response.json() : {};
   return json;
 }

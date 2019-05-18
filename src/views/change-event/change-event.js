@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Button } from 'semantic-ui-react';
 import { toast } from 'react-toastify';
 
-import { getAllEvents, setActiveEvent, syncToBikeReg } from '../../api/events';
+import { getAllEvents, setEventActive, syncToBikeReg } from '../../api/events';
 import { paths } from '../../routes';
 
 import AdminHeader from '../../components/admin-header/admin-header';
@@ -23,12 +23,14 @@ function ChangeEvent() {
         .sort((a, b) => a.name - b.name)
         .map(event => (event.active ? (event = { ...event, name: `${event.name} // Active` }) : event));
       setEvents(ordered);
-      const activeEvent = events.filter(event => event.active)[0];
-      setActiveEvent(activeEvent);
-      setSelectedEventId(activeEvent.id);
+      const active = events.filter(event => event.active)[0];
+      if (activeEvent.id !== active.id) {
+        setActiveEvent(active);
+        setSelectedEventId(active.id);
+      }
     };
     fetchEvents();
-  }, []);
+  }, [activeEvent]);
 
   if (!events.length) return <Loading />;
 
@@ -46,7 +48,7 @@ function ChangeEvent() {
       <p />
       <Button
         negative
-        onClick={() => changeActive(selectedEventId, () => setSelectedEventId(activeEvent.id))}
+        onClick={() => changeActive(selectedEventId, setActiveEvent, () => setSelectedEventId(activeEvent.id))}
         disabled={selectedEventId === activeEvent.id || selectedEventId === ''}
       >
         Change Active
@@ -58,9 +60,10 @@ function ChangeEvent() {
   );
 }
 
-function changeActive(selectedEventId, resetActive) {
+async function changeActive(selectedEventId, setActiveEvent, resetActive) {
   if (window.confirm(`Are you sure you want to change the active event?`)) {
-    setActiveEvent(selectedEventId);
+    await setEventActive(selectedEventId);
+    await setActiveEvent({}); // this will trigger the useEffect to reload data from api
     toast.success('Active event changed', {
       position: toast.POSITION.BOTTOM_CENTER,
     });

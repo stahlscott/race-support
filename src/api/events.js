@@ -12,8 +12,9 @@ export async function getRacesByEvent(eventId) {
   return get(url);
 }
 
-export async function setActiveEvent(eventId) {
-  console.log('setActiveEvent not yet implemented');
+export async function setEventActive(eventId) {
+  const url = `${BASE_URL}/${eventId}/active`;
+  return get(url);
 }
 
 export async function syncToBikeReg(eventId) {
