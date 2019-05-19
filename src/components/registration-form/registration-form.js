@@ -22,6 +22,7 @@ function RegistrationForm({ selectedRider, races, onCancel }) {
   }, [selectedRider]);
 
   const { name, email, usac, bib, raceId, checkedIn } = rider;
+  const formIncomplete = !rider.name || !rider.email || !rider.usac || !rider.bib || !rider.raceId;
 
   return (
     <Form>
@@ -68,13 +69,14 @@ function RegistrationForm({ selectedRider, races, onCancel }) {
       />
       <p />
       <Form.Checkbox
+        disabled={formIncomplete}
         checked={checkedIn}
         onChange={() => setRider({ ...rider, checkedIn: !checkedIn })}
         label="Checked In"
       />
       <Form.Group>
         <Form.Button
-          disabled={!rider.name || !rider.email || !rider.usac || !rider.bib || !rider.raceId}
+          disabled={formIncomplete}
           primary
           onClick={async () => {
             await submit(rider);
@@ -83,7 +85,9 @@ function RegistrationForm({ selectedRider, races, onCancel }) {
         >
           Submit
         </Form.Button>
-        <Form.Button onClick={onCancel}>Cancel</Form.Button>
+        <Form.Button disabled={formIncomplete} onClick={onCancel}>
+          Cancel
+        </Form.Button>
       </Form.Group>
     </Form>
   );
