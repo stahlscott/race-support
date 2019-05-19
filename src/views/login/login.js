@@ -3,16 +3,19 @@ import { Redirect } from 'react-router-dom';
 import { Container, Form } from 'semantic-ui-react';
 
 import { paths } from '../../routes';
-import { AuthContext } from '../../auth';
+import { AuthContext, types } from '../../auth';
 
 import './login.css';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const auth = useContext(AuthContext);
 
-  return auth.state.isAuthenticated === true ? (
+  const auth = useContext(AuthContext);
+  const { isAuthenticated } = auth.state;
+  const login = () => auth.dispatch({ type: types.login, username, password });
+
+  return isAuthenticated === true ? (
     <Redirect to={paths.registration} />
   ) : (
     <Container className="container">
@@ -32,9 +35,7 @@ function Login() {
           value={password}
           onChange={(e, v) => setPassword(v.value)}
         />
-        <Form.Button onClick={() => auth.dispatch({ type: 'IS_AUTHENTICATED', username, password })}>
-          Submit
-        </Form.Button>
+        <Form.Button onClick={login}>Submit</Form.Button>
       </Form>
     </Container>
   );
