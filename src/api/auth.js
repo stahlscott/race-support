@@ -19,3 +19,6 @@ export async function isAuthenticated() {
   const url = `${BASE_URL}/login/test`;
   return (await get(url).login) === 'success';
 }
+
+// THIS IS NOT REALLY WORKING DUE TO CORS
+// I think we need to just auth locally on the clientside
