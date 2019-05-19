@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
-import { Button, Container, Form } from 'semantic-ui-react';
+import React, { useState, useContext } from 'react';
+import { Redirect } from 'react-router-dom';
+import { Container, Form } from 'semantic-ui-react';
+
+import { paths } from '../../routes';
+import { AuthContext } from '../../auth';
 
 import './login.css';
-import { login, logout, isAuthenticated } from '../../api/auth';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  return (
+  const auth = useContext(AuthContext);
+
+  return auth.state.isAuthenticated === true ? (
+    <Redirect to={paths.registration} />
+  ) : (
     <Container className="container">
       <Form>
         <Form.Input
@@ -25,16 +32,10 @@ function Login() {
           value={password}
           onChange={(e, v) => setPassword(v.value)}
         />
-        <Form.Button
-          onClick={() => {
-            login(username, password);
-          }}
-        >
+        <Form.Button onClick={() => auth.dispatch({ type: 'IS_AUTHENTICATED', username, password })}>
           Submit
         </Form.Button>
       </Form>
-      <Button onClick={() => logout()}>logout</Button>
-      <Button onClick={async () => await isAuthenticated()}>is auth</Button>
     </Container>
   );
 }
