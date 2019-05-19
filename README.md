@@ -3,9 +3,7 @@ npm i
 npm start
 ```
 
-TODO: _when its working better:_
-
-make sure race-support-backend is stood up
+follow directions at [race-support-backend](https://github.com/stahlscott/race-support-backend) to get backend stood up
 
 navigate browser to:
 
