@@ -21,8 +21,6 @@ function RegistrationForm({ selectedRider, races, onCancel }) {
     setRider(selectedRider.id ? selectedRider : defaultRider);
   }, [selectedRider]);
 
-  console.log(rider);
-
   const { name, email, usac, bib, raceId, checkedIn } = rider;
 
   return (
