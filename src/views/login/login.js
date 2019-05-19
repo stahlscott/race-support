@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { Redirect } from 'react-router-dom';
-import { Container, Form } from 'semantic-ui-react';
+import { Redirect, Link } from 'react-router-dom';
+import { Container, Form, Breadcrumb } from 'semantic-ui-react';
 
 import { paths } from '../../routes';
 import { AuthContext, types } from '../../auth';
@@ -19,6 +19,12 @@ function Login() {
     <Redirect to={paths.registration} />
   ) : (
     <Container className="container">
+      <Breadcrumb>
+        <Breadcrumb.Section>
+          <Link to="">Home</Link>
+        </Breadcrumb.Section>
+      </Breadcrumb>
+      <p />
       <Form>
         <Form.Input
           placeholder="Username"
